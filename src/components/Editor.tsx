@@ -1,13 +1,23 @@
 import React from 'react';
-import { FileText, Code, Database } from 'lucide-react';
+import { FileText, Code, Database, X } from 'lucide-react';
 
 interface EditorProps {
   activeFile: string | null;
-  fileContent: string;
+  openFiles: string[];
+  fileContents: Record<string, string>;
+  onFileClose: (filePath: string) => void;
+  onFileSelect: React.Dispatch<React.SetStateAction<string | null>>;
   onCodeChange: (content: string) => void;
 }
 
-const Editor: React.FC<EditorProps> = ({ activeFile, fileContent, onCodeChange }) => {
+const Editor: React.FC<EditorProps> = ({ 
+  activeFile, 
+  openFiles, 
+  fileContents, 
+  onFileClose, 
+  onFileSelect, 
+  onCodeChange 
+}) => {
   const getFileIcon = (fileName: string) => {
     const extension = fileName?.split('.').pop()?.toLowerCase();
     switch (extension) {
@@ -36,15 +46,36 @@ const Editor: React.FC<EditorProps> = ({ activeFile, fileContent, onCodeChange }
 
   return (
     <div className="flex-1 flex flex-col bg-white dark:bg-gray-900">
-      <div className="flex items-center gap-2 px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-        {getFileIcon(activeFile)}
-        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          {activeFile}
-        </span>
-      </div>
+      {/* Tab Bar */}
+      {openFiles.length > 0 && (
+        <div className="flex items-center bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+          {openFiles.map((file) => (
+            <div
+              key={file}
+              className={`flex items-center gap-2 px-3 py-2 border-r border-gray-200 dark:border-gray-700 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 ${
+                activeFile === file ? 'bg-white dark:bg-gray-900' : ''
+              }`}
+              onClick={() => onFileSelect(file)}
+            >
+              {getFileIcon(file)}
+              <span className="text-sm">{file.split('/').pop()}</span>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onFileClose(file);
+                }}
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+      
       <div className="flex-1 p-4">
         <textarea
-          value={fileContent}
+          value={activeFile ? fileContents[activeFile] || '' : ''}
           onChange={(e) => onCodeChange(e.target.value)}
           className="w-full h-full resize-none border-none outline-none bg-transparent text-sm font-mono text-gray-800 dark:text-gray-200"
           placeholder="Start typing your code..."

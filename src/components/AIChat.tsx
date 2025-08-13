@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Code, Lightbulb, Zap, Copy, Brain, Sparkles, FileCode, Cpu } from 'lucide-react';
-import { ChatMessage, CodeSuggestion } from '../types';
+import { Send, User, Copy, Brain, Sparkles, FileCode, Cpu } from 'lucide-react';
+import { ChatMessage } from '../types';
 import AIService from '../services/AIService';
 
 interface AIChatProps {
@@ -9,7 +9,7 @@ interface AIChatProps {
   onCodeSuggestion: (code: string) => void;
 }
 
-const AIChat: React.FC<AIChatProps> = ({ activeFile, currentCode, onCodeSuggestion }) => {
+const AIChat: React.FC<AIChatProps> = ({ activeFile, currentCode }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '1',
@@ -43,7 +43,7 @@ const AIChat: React.FC<AIChatProps> = ({ activeFile, currentCode, onCodeSuggesti
     setIsLoading(true);
 
     try {
-      let aiResponse;
+      let aiResponse: any;
       const language = activeFile ? activeFile.split('.').pop() || 'javascript' : 'javascript';
       
       // Determine the type of request

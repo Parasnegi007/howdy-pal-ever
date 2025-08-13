@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronRight, ChevronDown, File, Folder, Plus, Search } from 'lucide-react';
+import { ChevronRight, ChevronDown, Folder, Plus, Search } from 'lucide-react';
 import { FileTree } from '../types';
 
 interface SidebarProps {

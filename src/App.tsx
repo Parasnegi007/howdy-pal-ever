@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import Editor from './components/Editor';
 import AIChat from './components/AIChat';
 import Terminal from './components/Terminal';
 import StatusBar from './components/StatusBar';
-import { FileTree, FileContent } from './types';
+import { FileTree } from './types';
 
 function App() {
   const [activeFile, setActiveFile] = useState<string | null>('src/main.js');
